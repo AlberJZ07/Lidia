@@ -1,94 +1,207 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Para Lidia ❤️</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Lidia ❤️</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Georgia', 'Segoe UI', serif; }
+        body { background: linear-gradient(135deg, #1a0000, #330011); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-<style>
+        /* PANTALLA DE BIENVENIDA */
+        #bienvenida { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #1a0000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 1.2s ease; }
+        #bienvenida .corazon-grande { font-size: 5rem; color: #ff3366; margin-bottom: 2rem; animation: latido 1.8s infinite ease-in-out; }
+        #bienvenida h1 { font-size: 2.8rem; color: #ff8899; margin-bottom: 1.5rem; text-align: center; padding: 0 1rem; }
+        #btn-entrar { padding: 1.2rem 3rem; font-size: 1.4rem; background: linear-gradient(45deg, #ff3366, #ff6699); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 0 25px rgba(255,51,102,0.5); transition: all 0.4s ease; }
+        #btn-entrar:hover { transform: scale(1.1); box-shadow: 0 0 40px rgba(255,51,102,0.8); }
+        @keyframes latido { 0%,100% { transform: scale(1); } 25% { transform: scale(1.15); } 50% { transform: scale(1); } 75% { transform: scale(1.1); } }
 
-body{
-margin:0;
-background:#090909;
-font-family:Arial,sans-serif;
-color:white;
-text-align:center;
-overflow-x:hidden;
-}
+        /* EFECTO CORAZONES FLOTANDO */
+        .corazon-flotante { position: fixed; top: -5vh; font-size: 1.3rem; color: #ff6699; opacity: 0.7; animation: caer 7s linear forwards; pointer-events: none; z-index: 1; }
+        @keyframes caer { 0% { transform: translateY(0) rotate(0deg); opacity: 0.8; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
 
-h1{
-margin-top:80px;
-font-size:42px;
-color:#ff4d6d;
-}
+        /* CONTENIDO PRINCIPAL */
+        #contenido { display: none; position: relative; z-index: 2; }
+        .seccion { max-width: 950px; margin: 0 auto; padding: 3.5rem 2rem; text-align: center; }
+        .titulo-seccion { font-size: 2.2rem; color: #ff4d79; margin-bottom: 2rem; border-bottom: 2px solid rgba(255,77,121,0.4); padding-bottom: 0.8rem; display: inline-block; }
 
-p{
-font-size:20px;
-padding:20px;
-line-height:1.8;
-}
+        /* CONTADOR DE TIEMPO */
+        .contenedor-contador { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin: 2rem 0; }
+        .caja-tiempo { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,77,121,0.3); border-radius: 18px; padding: 1.5rem 1rem; min-width: 90px; backdrop-filter: blur(5px); }
+        .numero { font-size: 2.3rem; font-weight: bold; color: #ff4d79; margin-bottom: 0.3rem; }
+        .etiqueta { font-size: 0.85rem; color: #ffb3c2; text-transform: uppercase; letter-spacing: 1px; }
+        .texto-inicio { margin-top: 1.5rem; font-size: 1.1rem; color: #ffc0cb; }
 
-button{
-padding:15px 35px;
-font-size:20px;
-border:none;
-border-radius:50px;
-background:#ff4d6d;
-color:white;
-cursor:pointer;
-margin-top:20px;
-}
+        /* GALERÍA DE FOTOS */
+        .galeria { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-top: 2rem; }
+        .galeria img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(255,77,121,0.2); transition: all 0.3s ease; }
+        .galeria img:hover { transform: scale(1.05); border-color: #ff4d79; box-shadow: 0 0 15px rgba(255,77,121,0.4); }
+        .aviso-fotos { grid-column: 1 / -1; padding: 2rem; color: #ffb3c2; font-style: italic; }
 
-button:hover{
-background:#ff2d55;
-}
+        /* SECCIÓN VIDEOS */
+        .contenedor-videos { display: grid; gap: 1.5rem; margin-top: 2rem; }
+        .contenedor-videos video { width: 100%; max-width: 500px; border-radius: 12px; border: 2px solid rgba(255,77,121,0.3); }
 
-.corazon{
-font-size:80px;
-animation:latir 1s infinite;
-}
+        /* CARTA DE AMOR */
+        .carta { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 2.5rem; margin-top: 2rem; line-height: 1.9; font-size: 1.15rem; color: #ffe6eb; text-align: left; border: 1px solid rgba(255,77,121,0.2); }
+        .carta p { margin-bottom: 1.2rem; }
+        .firma { text-align: right; margin-top: 2rem; font-weight: bold; color: #ff4d79; font-size: 1.3rem; }
 
-@keyframes latir{
-0%{transform:scale(1);}
-50%{transform:scale(1.2);}
-100%{transform:scale(1);}
-}
+        /* BOTONES FLOTANTES */
+        .barra-botones { position: fixed; bottom: 2rem; right: 1.5rem; display: flex; flex-direction: column; gap: 1rem; z-index: 100; }
+        .btn { padding: 0.9rem 1.3rem; border: none; border-radius: 50px; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .btn-musica { background: linear-gradient(45deg, #ff3366, #ff6699); color: white; }
+        .btn-compartir { background: rgba(255,255,255,0.15); color: white; border: 1px solid #ff4d79; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255,51,102,0.4); }
 
-</style>
-
+        /* AJUSTES PARA CELULARES */
+        @media (max-width: 600px) {
+            #bienvenida h1 { font-size: 2rem; }
+            .titulo-seccion { font-size: 1.8rem; }
+            .carta { padding: 1.5rem; font-size: 1.05rem; }
+            .barra-botones { bottom: 1rem; right: 1rem; }
+        }
+    </style>
 </head>
-
 <body>
 
-<h1>Para mi niña ❤️</h1>
+<!-- PANTALLA DE BIENVENIDA -->
+<div id="bienvenida">
+    <div class="corazon-grande">❤️</div>
+    <h1>Una sorpresa muy especial para ti</h1>
+    <button id="btn-entrar">💖 Toca aquí para verla 💖</button>
+</div>
 
-<div class="corazon">❤️</div>
+<!-- CONTENIDO QUE APARECE DESPUÉS -->
+<div id="contenido">
 
-<p>
+    <div class="seccion">
+        <h2 class="titulo-seccion">✨ Cuánto tiempo hemos compartido ✨</h2>
+        <div class="contenedor-contador">
+            <div class="caja-tiempo"><div class="numero" id="años">0</div><div class="etiqueta">Años</div></div>
+            <div class="caja-tiempo"><div class="numero" id="meses">0</div><div class="etiqueta">Meses</div></div>
+            <div class="caja-tiempo"><div class="numero" id="dias">0</div><div class="etiqueta">Días</div></div>
+            <div class="caja-tiempo"><div class="numero" id="horas">0</div><div class="etiqueta">Horas</div></div>
+        </div>
+        <p class="texto-inicio">Todo comenzó en enero de 2023, y cada día ha sido un regalo desde entonces ❤️</p>
+    </div>
 
-Hola Lidia Ayne Garcia Ruiz...
+    <div class="seccion">
+        <h2 class="titulo-seccion">📸 Nuestros recuerdos 📸</h2>
+        <div class="galeria" id="galeria">
+            <div class="aviso-fotos">Aquí aparecerán todas tus fotos cuando las subas 🥰</div>
+        </div>
+    </div>
 
-Si estás leyendo esto es porque encontraste un pequeño pedazo de mi corazón.
+    <div class="seccion">
+        <h2 class="titulo-seccion">🎬 Momentos en video 🎬</h2>
+        <div class="contenedor-videos" id="videos">
+            <p style="color:#ffb3c2;">Aquí podrás agregar los videos que quieras compartir más adelante</p>
+        </div>
+    </div>
 
-Este no es solo un regalo.
+    <div class="seccion">
+        <h2 class="titulo-seccion">💌 Mi carta para ti 💌</h2>
+        <div class="carta">
+            <p>Mi querida Lidia:</p>
+            <p>Desde aquel día de enero de 2023 en que nuestros caminos se cruzaron, mi vida cambió para siempre. No sabía entonces que un solo encuentro traería tanta luz, tantas sonrisas y tanto amor a mi mundo.</p>
+            <p>Cada momento a tu lado lo guardo como el tesoro más grande: tus miradas, tus risas, tu forma de ser, tu paciencia y todo lo que construimos juntos. No importa cuánto tiempo pase, siempre me harás sentir la persona más afortunada del mundo.</p>
+            <p>Quiero seguir caminando contigo, cumplir sueños, superar obstáculos y crear miles de recuerdos más. Porque tú eres mi paz, mi alegría y mi razón para sonreír cada mañana.</p>
+            <p>Te quiero hoy, mañana y siempre, con todo mi corazón.</p>
+            <div class="firma">Con todo mi amor ❤️</div>
+        </div>
+    </div>
 
-Es un lugar donde quiero guardar nuestros recuerdos para que siempre puedas volver a ellos.
+</div>
 
-Gracias por estos casi 3 años de conocernos.
+<!-- BOTONES FLOTANTES -->
+<div class="barra-botones">
+    <button class="btn btn-musica" id="botonMusica">🎵 Reproducir ADMV</button>
+    <button class="btn btn-compartir" onclick="compartirPagina()">📤 Compartir</button>
+</div>
 
-Te amo muchísimo.
+<!-- CANCIÓN DE FONDO -->
+<audio id="miCancion" loop preload="metadata">
+    <source src="ADMV-Maluma.mp3" type="audio/mpeg">
+    Tu navegador no puede reproducir música.
 
-Con amor...
 
-Alber ❤️
 
-</p>
+<script>
+// 1. QUITAR PANTALLA DE BIENVENIDA
+document.getElementById('btn-entrar').addEventListener('click', () => {
+    const bienvenida = document.getElementById('bienvenida');
+    bienvenida.style.opacity = '0';
+    setTimeout(() => {
+        bienvenida.style.display = 'none';
+        document.getElementById('contenido').style.display = 'block';
+        generarCorazones();
+    }, 1200);
+});
 
-<button onclick="alert('Bienvenida a nuestra historia ❤️')">
+// 2. CONTADOR DE TIEMPO EXACTO
+function actualizarContador() {
+    const fechaInicio = new Date('2023-01-01');
+    const fechaAhora = new Date();
 
-Entrar
+    let años = fechaAhora.getFullYear() - fechaInicio.getFullYear();
+    let meses = fechaAhora.getMonth() - fechaInicio.getMonth();
+    let dias = fechaAhora.getDate() - fechaInicio.getDate();
+    let horas = fechaAhora.getHours() - fechaInicio.getHours();
 
-</button>
+    if (horas < 0) { dias--; horas += 24; }
+    if (dias < 0) { meses--; dias += new Date(fechaAhora.getFullYear(), fechaAhora.getMonth(), 0).getDate(); }
+    if (meses < 0) { años--; meses += 12; }
 
+    document.getElementById('años').textContent = años;
+    document.getElementById('meses').textContent = meses;
+    document.getElementById('dias').textContent = dias;
+    document.getElementById('horas').textContent = horas;
+}
+actualizarContador();
+setInterval(actualizarContador, 60000); // Se actualiza cada minuto
+
+// 3. GENERAR CORAZONES FLOTANDO
+function generarCorazones() {
+    setInterval(() => {
+        const corazon = document.createElement('div');
+        corazon.classList.add('corazon-flotante');
+        corazon.innerHTML = '❤️';
+        corazon.style.left = Math.random() * 100 + 'vw';
+        corazon.style.fontSize = (Math.random() * 1 + 0.8) + 'rem';
+        document.body.appendChild(corazon);
+        setTimeout(() => corazon.remove(), 7000);
+    }, 400);
+}
+
+// 4. CONTROL DE MÚSICA
+const cancion = document.getElementById('miCancion');
+const boton = document.getElementById('botonMusica');
+boton.addEventListener('click', () => {
+    if (cancion.paused) {
+        cancion.play().catch(err => console.log('El usuario debe hacer clic primero'));
+        boton.textContent = '⏸ Pausar canción';
+    } else {
+        cancion.pause();
+        boton.textContent = '🎵 Reproducir ADMV';
+    }
+});
+
+// 5. FUNCIÓN COMPARTIR
+function compartirPagina() {
+    const enlace = 'https://alberjz07.github.io/Lidia/';
+    if (navigator.share) {
+        navigator.share({
+            title: 'Para Lidia ❤️',
+            text: 'Una sorpresa muy especial hecha solo para ti',
+            url: enlace
+        });
+    } else {
+        alert('Copia este enlace: ' + enlace);
+    }
+}
+</script>
 </body>
 </html>
+
+version especial para lidia♥️
